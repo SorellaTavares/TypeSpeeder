@@ -10,6 +10,8 @@ public class TypeSpeederApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
         SpringApplication.run(TypeSpeederApplication.class, args);
+        Menu.displayMenu();
+
     }
 
     @Override

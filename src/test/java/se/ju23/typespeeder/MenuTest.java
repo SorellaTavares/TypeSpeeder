@@ -6,6 +6,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Collection;
 import java.util.List;
 import org.mockito.Mockito;
 
@@ -82,7 +83,7 @@ public class MenuTest {
     @Test
     public void menuShouldHaveAtLeastFiveOptions() {
         Menu menu = new Menu();
-        List<String> options = menu.getMenuOptions();
+        Collection<Object> options = menu.getMenuOptions();
         assertTrue(options.size() >= 5, "The menu should contain at least 5 alternatives.");
     }
 
