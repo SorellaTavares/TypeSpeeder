@@ -6,7 +6,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.Collection;
 import java.util.List;
 import org.mockito.Mockito;
 
@@ -39,6 +38,7 @@ public class MenuTest {
         }
     }
 
+
     @Test
     public void testMethodExists() {
         try {
@@ -51,6 +51,7 @@ public class MenuTest {
             fail("The method 'displayMenu()' does not exist in the class 'Menu'.", e);
         }
     }
+
 
     @Test
     public void testMenuImplementsInterface() {
@@ -72,6 +73,7 @@ public class MenuTest {
         }
     }
 
+
     @Test
     public void testDisplayMenuCallsGetMenuOptionsAndReturnsAtLeastFive() {
         Menu menuMock = Mockito.spy(new Menu());
@@ -83,7 +85,7 @@ public class MenuTest {
     @Test
     public void menuShouldHaveAtLeastFiveOptions() {
         Menu menu = new Menu();
-        Collection<Object> options = menu.getMenuOptions();
+        List<String> options = menu.getMenuOptions();
         assertTrue(options.size() >= 5, "The menu should contain at least 5 alternatives.");
     }
 
