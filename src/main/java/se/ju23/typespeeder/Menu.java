@@ -4,18 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Menu implements MenuService {
-
-    public static List<String> getMenuOptions() {
-        List<String> options = new ArrayList<>();
-        options.add("op 1");
-        options.add("op 2");
-        options.add("op 3");
-        options.add("op 4");
-        options.add("op 5");
-        return options;
+    private List<String> options;
+    public Menu() {
+        this.options = new ArrayList<>();
+        this.options.add("op 1");
+        this.options.add("op 2");
+        this.options.add("op 3");
+        this.options.add("op 4");
+        this.options.add("op 5");
+    }
+    public List<String> getMenuOptions() {
+        return this.options;
     }
 
-    public static void displayMenu() {
+    public void displayMenu() {
         System.out.println("Display menu here");
         List<String> options = getMenuOptions();
         for (String option : options) {
