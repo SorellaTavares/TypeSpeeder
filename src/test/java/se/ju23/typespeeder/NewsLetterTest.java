@@ -16,15 +16,16 @@ public class NewsLetterTest {
     @Test
     public void testNewsLetterClassExists() {
         try {
-            Class.forName("NewsLetter");
+            Class.forName("se.ju23.typespeeder.NewsLetter");
         } catch (ClassNotFoundException e) {
             throw new AssertionError("NewsLetter class should exist.", e);
         }
     }
+
     @Test
     public void testNewsLetterContentLength() {
         try {
-            Class<?> newsLetterClass = Class.forName("NewsLetter");
+            Class<?> newsLetterClass = Class.forName("se.ju23.typespeeder.NewsLetter");
 
             Field contentField = newsLetterClass.getDeclaredField("content");
             assertNotNull(contentField, "Field 'content' should exist in NewsLetter.");
@@ -47,24 +48,33 @@ public class NewsLetterTest {
     @Test
     public void testNewsLetterPublishDateTime() {
         try {
-            Class<?> someClass = Class.forName("NewsLetter");
+            // Hämtar klassen
+            Class<?> someClass = Class.forName("se.ju23.typespeeder.NewsLetter");
 
+            // Tittar att det finns ett fält
             Field publishDateTime = someClass.getDeclaredField("publishDateTime");
+            publishDateTime.setAccessible(true);
             assertNotNull(publishDateTime, "Field 'publishDateTime' should exist in NewsLetter class.");
 
+            // Tittar att fältet är rätt sorts
             assertTrue(publishDateTime.getType().equals(LocalDateTime.class), "Field 'publishDateTime' should be of type LocalDateTime.");
 
+            // Skapar ett nytt objekt av klassen?
             Object instance = someClass.getDeclaredConstructor().newInstance();
             LocalDateTime dateTimeValue = (LocalDateTime) publishDateTime.get(instance);
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String publishDateTimeCompare = new NewsLetter().getPublishDateTimeString();
+            // Ny variabel av formaterad tidigare variabel
             String formattedDateTime = dateTimeValue.format(formatter);
-            assertEquals("Expected format", formattedDateTime, "'publishDateTime' field should have format 'yyyy-MM-dd HH:mm:ss'.");
+            assertEquals(formattedDateTime, publishDateTimeCompare, "'publishDateTime' field should have format 'yyyy-MM-dd HH:mm:ss'.");
 
+            // Kollar att getter finns
             Method getterMethod = someClass.getDeclaredMethod("getPublishDateTime");
             assertNotNull(getterMethod, "Getter method for the field 'publishDateTime' should exist.");
 
 
+            // Om något inte finns catchar den undantaget
         } catch (ClassNotFoundException | NoSuchFieldException | NoSuchMethodException e) {
             fail("Error occurred while testing properties of NewsLetter.", e);
         } catch (InvocationTargetException e) {
@@ -75,4 +85,6 @@ public class NewsLetterTest {
             throw new RuntimeException(e);
         }
     }
+
 }
+
