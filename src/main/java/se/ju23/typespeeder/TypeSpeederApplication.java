@@ -1,26 +1,20 @@
 package se.ju23.typespeeder;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import se.ju23.typespeeder.data.UserRepository;
+import se.ju23.typespeeder.service.UserService;
+import java.util.Scanner;
 
-import java.time.LocalDateTime;
-
-@SpringBootApplication
-public class TypeSpeederApplication implements CommandLineRunner {
+public class TypeSpeederApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TypeSpeederApplication.class, args);
-        Menu m = new Menu();
-        m.displayMenu();
-        NewsLetter n = new NewsLetter();
+        Scanner scanner = new Scanner(System.in);
+        UserRepository userRepository = new UserRepository();
+        UserService userService = new UserService(userRepository);
+        Challenge challenge = new Challenge();
+        Menu menu = new Menu(challenge, userService);
 
+        System.out.println("Välkommen till TypeSpeeder!");
+        menu.displayMenu();
+        System.out.println("Hejdå!");
     }
-
-    @Override
-    public void run(String... args) throws Exception {
-
-    }
-
 }

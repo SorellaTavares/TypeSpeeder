@@ -1,25 +1,27 @@
 package se.ju23.typespeeder;
 
 import org.junit.jupiter.api.Test;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.lang.reflect.Method;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import se.ju23.typespeeder.service.UserService;
+
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
+import java.lang.reflect.Method;
 import java.util.List;
-import org.mockito.Mockito;
 
 import static org.mockito.Mockito.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MenuTest {
 
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     private final PrintStream originalOut = System.out;
+    private final InputStream originalIn = System.in;
+
+    private Challenge challenge = new Challenge();
 
     @BeforeEach
     public void setUpStreams() {
@@ -29,6 +31,12 @@ public class MenuTest {
     @AfterEach
     public void restoreStreams() {
         System.setOut(originalOut);
+        System.setIn(originalIn);
+    }
+
+    private void setDummyInput() {
+        String input = "svenska\n".repeat(10);
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
     }
 
     @Test
@@ -40,7 +48,6 @@ public class MenuTest {
             fail("The class 'Menu' does not exist.", e);
         }
     }
-
 
     @Test
     public void testMethodExists() {
@@ -54,7 +61,6 @@ public class MenuTest {
             fail("The method 'displayMenu()' does not exist in the class 'Menu'.", e);
         }
     }
-
 
     @Test
     public void testMenuImplementsInterface() {
@@ -76,15 +82,10 @@ public class MenuTest {
         }
     }
 
-
     @Test
     public void testDisplayMenuCallsGetMenuOptionsAndReturnsAtLeastFive() {
-        String input = "svenska\n";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-        Menu menuMock = Mockito.spy(new Menu());
+        setDummyInput();
+        Menu menuMock = spy(new Menu(challenge, new UserService()));
         menuMock.displayMenu();
         verify(menuMock, times(1)).getMenuOptions();
         assertTrue(menuMock.getMenuOptions().size() >= 5, "'getMenuOptions()' should return at least 5 alternatives.");
@@ -92,37 +93,29 @@ public class MenuTest {
 
     @Test
     public void menuShouldHaveAtLeastFiveOptions() {
-        Menu menu = new Menu();
+        Menu menu = new Menu(challenge, new UserService());
         List<String> options = menu.getMenuOptions();
         assertTrue(options.size() >= 5, "The menu should contain at least 5 alternatives.");
     }
 
     @Test
     public void menuShouldPrintAtLeastFiveOptions() {
-        String input = "svenska\n";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-        new Menu().displayMenu();
+        setDummyInput();
+        Menu menu = new Menu(challenge, new UserService());
+        menu.displayMenu();
+
         long count = outContent.toString().lines().count();
         assertTrue(count >= 5, "The menu should print out at least 5 alternatives.");
     }
 
     @Test
     public void testUserCanChooseSwedishLanguage() {
-        String input = "svenska\n";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
-
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outContent));
-        Menu menu = new Menu();
+        setDummyInput();
+        Menu menu = new Menu(challenge, new UserService());
         menu.displayMenu();
 
         String consoleOutput = outContent.toString();
         assertTrue(consoleOutput.contains("Välj språk (svenska/engelska):"), "Menu should prompt for language selection.");
         assertTrue(consoleOutput.contains("Svenska valt."), "Menu should confirm Swedish language selection.");
     }
-
 }
