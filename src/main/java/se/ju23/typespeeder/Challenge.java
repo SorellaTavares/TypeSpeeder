@@ -17,17 +17,28 @@ public class Challenge {
         System.out.println("Startar utmaning...");
         System.out.println("Skriv följande bokstäver: " + String.join(" ", letters));
 
+        long startTime = System.currentTimeMillis();
+
         String input = "";
         if (scanner.hasNextLine()) {
             input = scanner.nextLine().trim();
         }
 
-        if (!input.isEmpty()) {
-            System.out.println("Du skrev: " + input);
+        long endTime = System.currentTimeMillis();
+        long timeTaken = endTime - startTime;
+
+        String correct = String.join(" ", letters);
+        if (input.equals(correct)) {
+            System.out.println("Rätt!");
+        } else {
+            System.out.println("Fel. Du skrev: " + input);
+            System.out.println("Rätt var: " + correct);
         }
 
+        System.out.println("Tid: " + timeTaken + " ms");
         System.out.println("Utmaning avslutad!");
     }
+
 
     public List<String> lettersToType() {
         return letters;

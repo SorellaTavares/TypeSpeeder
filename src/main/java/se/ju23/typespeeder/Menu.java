@@ -66,7 +66,7 @@ public class Menu implements MenuService {
                     challenge.startChallenge(scanner);
                     break;
                 case "0":
-                    running = false;
+                    running = false; // avsluta menyn
                     break;
                 default:
                     System.out.println("Felaktigt val, försök igen.");
